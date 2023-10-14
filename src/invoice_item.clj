@@ -1,7 +1,8 @@
+
 (ns invoice-item
-  (:require [clojure.data.json :as json ])
-  ;(:require [::invoice :refer :all])
-  )
+  (:require [clojure.data.json :as json]
+            [clojure.string :as str])
+  (:import (java.sql Date)))
 
 (defn- discount-factor [{:invoice-item/keys [discount-rate]
                          :or                {discount-rate 0}}]
@@ -54,17 +55,25 @@
           )
   )
 ;; ------------------------------------------------------------------------------------------------
-
+;; Function to parse the invoice in the project and return a Clojure map
+(defn reformat-date
+  [date]
+  (let [[dd mm yyyy] (str/split date #"/")]
+  (str yyyy "-" mm "-" dd)
+  )
+  )
 (defn value-parser [key value]
-    (if (or (= key :items) (= key :taxes) (= key :customer) (= key :retentions) (number? value))
-      value
-      (str value)
-      )
+  (cond
+    (or (= key :items) (= key :taxes) (= key :customer) (= key :retentions) (number? value)) value
+    (or (= key :issue-date) (= key :payment_date)) (Date/valueOf (reformat-date value))
+    :else (str value)
+  )
   )
 
 (defn parse-json-to-map
-  [jsonObj]
-  (json/read-str jsonObj :key-fn #(keyword %) :value-fn value-parser)
+  [filename]
+  (json/read-str (slurp filename) :key-fn #(keyword %) :value-fn value-parser)
   )
-(def jsonInvoice (parse-json-to-map (slurp "../invoice.json")))
+(def jsonInvoice (parse-json-to-map "../invoice.json"))
 (print jsonInvoice)
+
