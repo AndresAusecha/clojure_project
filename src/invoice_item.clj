@@ -1,6 +1,7 @@
 (ns invoice-item
-  (:require [clojure.data.json :as json]
-            [clojure.spec.alpha :as s]))
+  (:require [clojure.data.json :as json ])
+  ;(:require [::invoice :refer :all])
+  )
 
 (defn- discount-factor [{:invoice-item/keys [discount-rate]
                          :or                {discount-rate 0}}]
@@ -55,7 +56,7 @@
 ;; ------------------------------------------------------------------------------------------------
 
 (defn value-parser [key value]
-    (if (or (= key :items) (= key :taxes) (= key :customer) (= key :retentions))
+    (if (or (= key :items) (= key :taxes) (= key :customer) (= key :retentions) (number? value))
       value
       (str value)
       )
