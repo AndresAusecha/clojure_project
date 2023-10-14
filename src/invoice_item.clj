@@ -10,6 +10,10 @@
     :or                {discount-rate 0}}]
   (* precise-price precise-quantity (discount-factor item)))
 
+;; The next code concerns the PROBLEM 1 which proposes a function that receives
+;; an invoice and returns only the items that match with the conditions
+;; which are 19 of IVA rate, and 1 of rete fuente, but not both at the time.
+;; --------------------------------------------------------------------
 (defn hasConditionsFirstFilter
   [{rate :tax/rate cat :retention/category taxCat :tax/category }]
   (and
@@ -28,7 +32,7 @@
     )
   )
 
-(defn get-conditions
+(defn get-fields
   [item]
   (concat
    (get item :taxable/taxes)
@@ -36,19 +40,14 @@
     )
   )
 
-
-;; (defn filter-invoices
-;;  [invoice]
-;;  (filter #(some has19percentIVA (get-taxable-taxes %)) (get invoice :invoice/items))
-;;  )
-
 (defn filter-invoice-items
   [invoice]
   (concat (->> (get invoice :invoice/items)
-       (filter #(hasConditionsFirstFilter (get-conditions %)))
+       (filter #(hasConditionsFirstFilter (get-fields %)))
                )
           (->> (get invoice :invoice/items)
-               (filter #(hasConditionsSecondFilter (get-conditions %)))
+               (filter #(hasConditionsSecondFilter (get-fields %)))
                )
           )
   )
+;; ------------------------------------------------------------------------------------------------
