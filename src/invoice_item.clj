@@ -10,14 +10,22 @@
     :or                {discount-rate 0}}]
   (* precise-price precise-quantity (discount-factor item)))
 
-(defn loadInvoice (clojure.edn/read-string (slurp "../invoice.edn")))
-
 (defn hasConditionsFirstFilter
-  [{rate :tax/rate cat :retention/category }]
+  [{rate :tax/rate cat :retention/category taxCat :tax/category }]
   (and
-   (= rate 19)
-   (not (= cat :ret_fuente ))
+    (= taxCat :iva)
+    (= rate 19)
+    (not (= cat :ret_fuente ))
    )
+  )
+
+(defn hasConditionsSecondFilter
+  [{ cat :retention/category taxCat :tax/category retRate :retention/rate }]
+  (and
+    (not (= taxCat :iva))
+    (= cat :ret_fuente)
+    (= retRate 1)
+    )
   )
 
 (defn get-conditions
@@ -36,6 +44,11 @@
 
 (defn filter-invoice-items
   [invoice]
-  (->> (get invoice :invoice/items)
+  (concat (->> (get invoice :invoice/items)
        (filter #(hasConditionsFirstFilter (get-conditions %)))
-               ))
+               )
+          (->> (get invoice :invoice/items)
+               (filter #(hasConditionsSecondFilter (get-conditions %)))
+               )
+          )
+  )
