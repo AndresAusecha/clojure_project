@@ -1,13 +1,13 @@
 {
   "invoice": {
-    "issue_date": "13/10/2020",
+    "issue-date": "13/10/2020",
     "order_reference": "PEDID_0001",
     "payment_date": "12/11/2020",
     "payment_means": "DEBIT_CARD",
     "payment_means_type": "DEBITO",
     "number": "1",
     "customer": {
-      "company_name": "ANDRADE RODRIGUEZ MANUEL ALEJANDRO",
+      "name": "ANDRADE RODRIGUEZ MANUEL ALEJANDRO",
       "email": "cgallegoaecu@gmail.com"
     },
     "items": [
