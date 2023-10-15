@@ -33,7 +33,9 @@
 
 (s/def ::invoice
   (s/keys :req [
+                :invoice/issue-date
                 :invoice/customer
+                :invoice/items
                 ]))
 
 ; (println (s/valid? ::invoice { :invoice/customer { :customer/name "ANDRADE RODRIGUEZ MANUEL ALEJANDRO", :customer/email "cgallegoaecu@gmail.com" } } ))

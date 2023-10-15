@@ -66,7 +66,7 @@
 (defn value-parser [key value]
   (cond
     (or (= key :items) (= key :taxes) (= key :customer) (= key :retentions) (number? value)) value
-    (or (= key :issue-date) (= key :payment_date)) (Date/valueOf (reformat-date value))
+    (or (= key :issue_date) (= key :payment_date)) (Date/valueOf (reformat-date value))
     :else (str value)
     )
   )

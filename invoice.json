@@ -1,6 +1,6 @@
 {
   "invoice": {
-    "issue-date": "13/10/2020",
+    "issue_date": "13/10/2020",
     "order_reference": "PEDID_0001",
     "payment_date": "12/11/2020",
     "payment_means": "DEBIT_CARD",
